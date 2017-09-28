@@ -18,6 +18,9 @@ class CreateKelasTable extends Migration
             $table->string('fakultas');
             $table->string('prodi');
             $table->string('doswal');
+
+            $table->foreign('doswal')->references('kode_dosen')->on('dosen')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

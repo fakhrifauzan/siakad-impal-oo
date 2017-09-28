@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Mahasiswa;
+use App\Kelas;
 
-class MahasiswaController extends Controller
+class KelasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswa = Mahasiswa::all();
+      $kelas = Kelas::all();
 
-        return view('admin.mahasiswa.index', compact('mahasiswa'));
+      return view('admin.kelas.index', compact('kelas'));
     }
 
     /**

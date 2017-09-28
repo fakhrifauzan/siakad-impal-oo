@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/mahasiswa', 'MahasiswaController@index');
 Route::get('/dosen', 'DosenController@index');
+Route::get('/kelas', 'KelasController@index');
+Route::get('/matkul', 'MataKuliahController@index');

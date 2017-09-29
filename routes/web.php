@@ -19,7 +19,24 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/mahasiswa', 'MahasiswaController@index');
-Route::get('/dosen', 'DosenController@index');
-Route::get('/kelas', 'KelasController@index');
-Route::get('/matkul', 'MataKuliahController@index');
+// Route::get('/mahasiswa', 'MahasiswaController@index');
+// Route::get('/dosen', 'DosenController@index');
+// Route::get('/kelas', 'KelasController@index');
+// Route::get('/matkul', 'MataKuliahController@index');
+// Route::get('/jadwal', 'JadwalController@index');
+
+Route::resource('mahasiswa', 'MahasiswaController');
+Route::resource('dosen', 'DosenController');
+Route::resource('kelas', 'KelasController');
+Route::resource('matkul', 'MataKuliahController');
+Route::resource('jadwal', 'JadwalController');
+Route::resource('registrasi', 'RegistrasiController');
+
+Route::prefix('admin')->group(function () {
+    // Route::resource('mahasiswa', 'MahasiswaController');
+    // Route::resource('dosen', 'DosenController');
+    // Route::resource('kelas', 'KelasController');
+    // Route::resource('matkul', 'MataKuliahController');
+    // Route::resource('jadwal', 'JadwalController');
+    // Route::resource('registrasi', 'RegistrasiController');
+});

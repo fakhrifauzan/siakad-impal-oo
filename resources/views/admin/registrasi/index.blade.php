@@ -122,7 +122,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="tambahModalLabel">KONFIGURASI</h5>
+          <h5 class="modal-title" id="tambahModalLabel"></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -134,10 +134,10 @@
               <div class="form-group col-md-12">
                 <label for="statusRegistrasi" class="col-form-label">Status Registrasi</label>
                 <select id="selectStatus" class="form-control" name="status">
-                  <option selected>Choose...</option>
+                  <option>Choose...</option>
                     @php ($status = ['Aktif', 'Tidak Aktif'])
                     @foreach($status as $value)
-                        <option value="{{ $value }}">{{ $value }}</option>
+                        <option value="{{ $value }}" {{($statusReg == $value) ? 'selected':''}}>{{ $value }}</option>
                     @endforeach
                 </select>
               </div>
@@ -147,7 +147,7 @@
                       <option selected>Choose...</option>
                       @php ($tahun = ['1516/1', '1516/2', '1617/1', '1617/2', '1718/1', '1718/2'])
                       @foreach($tahun as $value)
-                          <option value="{{ $value }}">{{ $value }}</option>
+                          <option value="{{ $value }}" {{($tahunAjar == $value) ? 'selected':''}}>{{ $value }}</option>
                       @endforeach
                   </select>
               </div>
@@ -180,7 +180,7 @@
 
         function config() {
             $('#configModal').modal('show'); // show bootstrap modal
-            $('.modal-title').text('Konfigurasi Registrasi'); // Set Title to Bootstrap modal title
+            $('.modal-title').text('Pengaturan Registrasi'); // Set Title to Bootstrap modal title
             $('#formModal').attr('method','post');
             $('#formModal').attr('action','{{ url('/registrasi') }}');
         }

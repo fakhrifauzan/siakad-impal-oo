@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Registrasi;
 use App\Mahasiswa;
@@ -18,8 +19,10 @@ class RegistrasiController extends Controller
     {
       $registrasi = Registrasi::all();
       $mahasiswa = Mahasiswa::all();
+      $statusReg = $this->getStatusRegistrasi();
+      $tahunAjar = $this->getTahunAjar();
 
-      return view('admin.registrasi.index', compact('registrasi', 'mahasiswa'));
+      return view('admin.registrasi.index', compact('registrasi', 'mahasiswa', 'statusReg', 'tahunAjar'));
     }
 
     /**
@@ -105,5 +108,15 @@ class RegistrasiController extends Controller
     {
       Registrasi::destroy($id);
       return redirect('/registrasi');
+    }
+
+    public function getStatusRegistrasi(){
+      $config = DB::table('config')->where('config', 'status_reg')->first();
+      return $config->value;
+    }
+
+    public function getTahunAjar(){
+      $config = DB::table('config')->where('config', 'tahun_ajar')->first();
+      return $config->value;
     }
 }

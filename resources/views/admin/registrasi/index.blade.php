@@ -128,7 +128,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="formModal">
+          <form id="formConfig">
             {{ csrf_field() }}
             <div class="form-row">
               <div class="form-group col-md-12">
@@ -181,8 +181,9 @@
         function config() {
             $('#configModal').modal('show'); // show bootstrap modal
             $('.modal-title').text('Pengaturan Registrasi'); // Set Title to Bootstrap modal title
-            $('#formModal').attr('method','post');
-            $('#formModal').attr('action','{{ url('/registrasi') }}');
+            $('#formConfig').attr('action', '{{ url('/registrasi/updateConfig') }}/');
+            $('#formConfig').attr('method','post');
+            // $('#formConfig').prepend('{{ method_field('PUT') }}');
         }
 
         function add_tagihan() {

@@ -95,7 +95,15 @@ class RegistrasiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $registrasi = Registrasi::find($id);
+      $registrasi->update([
+        'nim' => $request->nim,
+        'semester' => $request->semester,
+        'tagihan' => $request->tagihan,
+        'status' => $request->status,
+      ]);
+
+      return redirect('/registrasi');
     }
 
     /**
@@ -118,5 +126,20 @@ class RegistrasiController extends Controller
     public function getTahunAjar(){
       $config = DB::table('config')->where('config', 'tahun_ajar')->first();
       return $config->value;
+    }
+
+    public function setKonfigurasiRegistrasi(Request $request){
+      // dd($request);
+      $request->validate([
+        'status' => 'required',
+        'tahun_ajar' => 'required',
+      ]);
+
+      DB::table('config')->where('config', 'status_reg')
+            ->update(['value' => $request->status]);
+      DB::table('config')->where('config', 'tahun_ajar')
+            ->update(['value' => $request->tahun_ajar]);
+
+      return redirect('/registrasi');
     }
 }

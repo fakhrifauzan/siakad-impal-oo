@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2017 at 06:33 AM
+-- Generation Time: Oct 07, 2017 at 03:25 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -50,6 +50,13 @@ CREATE TABLE `bukti_pembayaran` (
   `pemilik_norek` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bukti_pembayaran`
+--
+
+INSERT INTO `bukti_pembayaran` (`id`, `id_registrasi`, `tanggal`, `bank`, `jumlah`, `pemilik_norek`) VALUES
+(2, 3, '2017-09-30', 'Mandiri', 2147483647, 'sdasdadsad');
+
 -- --------------------------------------------------------
 
 --
@@ -60,6 +67,14 @@ CREATE TABLE `config` (
   `config` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`config`, `value`) VALUES
+('status_reg', 'Tidak Aktif'),
+('tahun_ajar', '1516/2');
 
 -- --------------------------------------------------------
 
@@ -75,6 +90,17 @@ CREATE TABLE `dosen` (
   `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dosen`
+--
+
+INSERT INTO `dosen` (`kode_dosen`, `nama_dosen`, `fakultas`, `status`, `username`, `password`) VALUES
+('AAA', 'Alan Ardi A', 'Informatika', 'Tetap', 'aaa', 'aaa'),
+('ABC', 'Adi budi Cantika', 'Manajemen', 'Tetap', 'abc', 'abc'),
+('ARK', 'Artur Rudi', 'Manjemen', 'Tetap', 'ark', 'ark'),
+('REZ', 'Reza Aditama', 'Industri Kreatif', 'Tetap', 'rez', 'rez'),
+('ZZZ', 'Zulaiha', 'Informatika', 'Tetap', 'zzz', 'zzz');
 
 -- --------------------------------------------------------
 
@@ -92,6 +118,18 @@ CREATE TABLE `jadwal` (
   `ruangan` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `semester` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `jadwal`
+--
+
+INSERT INTO `jadwal` (`id`, `kode_dosen`, `kode_matkul`, `kode_kelas`, `hari`, `jam`, `ruangan`, `semester`) VALUES
+(2, 'AAA', 'PBO', 'IF-39-10', 'Selasa', '09.30 - 12.30', 'E302', '1516/2'),
+(3, 'REZ', 'PBO', 'IF-39-10', 'Selasa', '12.30 - 15.30', 'B105', '1516/2'),
+(4, 'AAA', 'DAP', 'DS-39-04', 'Senin', '09.30 - 12.30', 'E301', '1617/2'),
+(5, 'ABC', 'DAP', 'IF-39-10', 'Senin', '06.30 - 09.30', 'E302', '1516/2'),
+(6, 'ZZZ', 'PBO', 'IF-39-10', 'Senin', '15.30 - 18.30', 'E301', '1516/2'),
+(7, 'REZ', 'DAP', 'IF-39-10', 'Jumat', '09.30 - 12.30', 'A307', '1516/2');
 
 -- --------------------------------------------------------
 
@@ -111,7 +149,9 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`kode_kelas`, `fakultas`, `prodi`, `doswal`) VALUES
-('IF-39-10', 'Informatika', 'S1 Teknik Informatika', 'AAA');
+('DS-39-04', 'Industri Kreatif', 'S1 Desain Komunikasi Visual', 'REZ'),
+('IF-39-10', 'Informatika', 'S1 Teknik Informatika', 'AAA'),
+('MB-40-09', 'Manajemen', 'S1 Manajemen', 'ZZZ');
 
 -- --------------------------------------------------------
 
@@ -135,7 +175,8 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`nim`, `nama`, `fakultas`, `prodi`, `kelas`, `tahun_masuk`, `username`, `password`) VALUES
-(111, 'Adam Budi', 'Informatika', 'S1 Teknik Informatika', 'IF-39-10', '2015', '111', '111');
+(111, 'Adam Budi', 'Informatika', 'S1 Teknik Informatika', 'IF-39-10', '2015', '111', '111'),
+(222, 'Rahayu', 'Informatika', 'S1 Teknik Informatika', 'MB-40-09', '2014', '222', '222');
 
 -- --------------------------------------------------------
 
@@ -149,6 +190,17 @@ CREATE TABLE `matkul` (
   `sks` int(11) NOT NULL,
   `fakultas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `matkul`
+--
+
+INSERT INTO `matkul` (`kode_matkul`, `nama_matkul`, `sks`, `fakultas`) VALUES
+('DAP', 'Dasar Algoritma dan Pemograman', 3, 'Informatika'),
+('MPB', 'Manajemen Pemasaran Bisnis', 2, 'Manajemen'),
+('NIR', 'Nirmana', 4, 'Industri Kreatif'),
+('PBO', 'Pemograman Berorientasi Objek', 3, 'Informatika'),
+('STD', 'Struktur Data', 3, 'Informatika');
 
 -- --------------------------------------------------------
 
@@ -222,6 +274,13 @@ CREATE TABLE `paycheck` (
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `paycheck`
+--
+
+INSERT INTO `paycheck` (`id`, `nama`, `username`, `password`) VALUES
+(1, 'Payment Checker', 'paycheck', 'paycheck');
+
 -- --------------------------------------------------------
 
 --
@@ -235,6 +294,17 @@ CREATE TABLE `registrasi` (
   `tagihan` bigint(20) NOT NULL,
   `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `registrasi`
+--
+
+INSERT INTO `registrasi` (`id`, `nim`, `semester`, `tagihan`, `status`) VALUES
+(1, 111, '1516/1', 4500000, 'Lunas'),
+(3, 111, '1516/2', 5000000, 'Lunas'),
+(6, 222, '1617/2', 8500000, 'Lunas'),
+(7, 111, '1617/2', 80000000, 'Belum Lunas'),
+(8, 222, '1617/1', 45000000, 'Belum Lunas');
 
 -- --------------------------------------------------------
 
@@ -410,12 +480,12 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `bukti_pembayaran`
 --
 ALTER TABLE `bukti_pembayaran`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
@@ -430,12 +500,12 @@ ALTER TABLE `nilai`
 -- AUTO_INCREMENT for table `paycheck`
 --
 ALTER TABLE `paycheck`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `registrasi`
 --
 ALTER TABLE `registrasi`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `reg_matkul`
 --

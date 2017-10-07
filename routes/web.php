@@ -33,28 +33,28 @@ Auth::routes();
 // Route::resource('registrasi', 'RegistrasiController');
 // Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
 
-Route::prefix('admin')->group(function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'guest'], function () {
     Route::get('/home', 'AdminController@index')->name('admin.home');
     Route::resource('mahasiswa', 'MahasiswaController', ['names' => [
-        'index' => 'admin.mahasiswa.index'      
+        'index' => 'admin.mahasiswa.index'
     ]]);
     Route::resource('dosen', 'DosenController', ['names' => [
-        'index' => 'admin.dosen.index'      
+        'index' => 'admin.dosen.index'
     ]]);
     Route::resource('kelas', 'KelasController', ['names' => [
-        'index' => 'admin.kelas.index'      
+        'index' => 'admin.kelas.index'
     ]]);
     Route::resource('matkul', 'MataKuliahController', ['names' => [
-        'index' => 'admin.matkul.index'      
+        'index' => 'admin.matkul.index'
     ]]);
     Route::resource('jadwal', 'JadwalController', ['names' => [
         'index' => 'admin.jadwal.index',
-        'store' => 'admin.jadwal.store',          
-        'edit' => 'admin.jadwal.edit',          
-        'update' => 'admin.jadwal.update'          
+        'store' => 'admin.jadwal.store',
+        'edit' => 'admin.jadwal.edit',
+        'update' => 'admin.jadwal.update'
     ]]);
     Route::resource('registrasi', 'RegistrasiController', ['names' => [
-        'index' => 'admin.registrasi.index'   
+        'index' => 'admin.registrasi.index'
     ]]);
     Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
 });

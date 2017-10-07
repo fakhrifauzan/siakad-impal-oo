@@ -19,17 +19,17 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if (Auth::user()->user_level == 'admin') {
-                // return redirect('/admin/home');
-                return redirect()->route('admin.home');
+                return redirect('/admin/home');
+                // return redirect()->route('admin.home');
             } else if (Auth::user()->user_level == 'dosen') {
-                // return redirect('/dosen/home');
-                return redirect()->route('dosen.home');
+                return redirect('/dosen/home');
+                // return redirect()->route('dosen.home');
             } else if (Auth::user()->user_level == 'mahasiswa') {
-                // return redirect('/mahasiswa/home');
-                return redirect()->route('mahasiswa.home');
+                return redirect('/mahasiswa/home');
+                // return redirect()->route('mahasiswa.home');
             } else {
-                // return redirect('/paycheck/home');
-                return redirect()->route('paycheck.home');
+                return redirect('/paycheck/home');
+                // return redirect()->route('paycheck.home');
             }
         }
         return $next($request);

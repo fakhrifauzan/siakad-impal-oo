@@ -56,6 +56,10 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'admin' => \App\Http\Middleware\Admin::class,
+        'dosen' => \App\Http\Middleware\Dosen::class,
+        'mahasiswa' => \App\Http\Middleware\Mahasiswa::class,
+        'paycheck' => \App\Http\Middleware\Paycheck::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

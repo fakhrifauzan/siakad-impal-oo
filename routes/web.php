@@ -17,10 +17,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/logout',function(){
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
+
+//bypass login
 
 
-// Route::get('/mahasiswa', 'MahasiswaController@index');
-// Route::get('/dosen', 'DosenController@index');
+
+Route::get('/mahasiswa', 'MahasiswaController@index')->middleware('mahasiswa');
+Route::get('/dosen', 'DosenController@index')->middleware('dosen');
+Route::get('/admin', 'AdminController@index')->middleware('admin');
+Route::get('/paycheck', 'AdminController@index')->middleware('admin');
 // Route::get('/kelas', 'KelasController@index');
 // Route::get('/matkul', 'MataKuliahController@index');
 // Route::get('/jadwal', 'JadwalController@index');
@@ -33,7 +42,7 @@ Auth::routes();
 // Route::resource('registrasi', 'RegistrasiController');
 // Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'guest'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/home', 'AdminController@index')->name('admin.home');
     Route::resource('mahasiswa', 'MahasiswaController', ['names' => [
         'index' => 'admin.mahasiswa.index'
@@ -59,10 +68,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'guest'], function () {
     Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
 });
 
-Route::group(['prefix' => 'dosen', 'middleware' => 'guest'], function () {
+Route::group(['prefix' => 'dosen', 'middleware' => 'dosen'], function () {
     Route::get('/home', 'DosenController@index')->name('dosen.home');
 });
 
-Route::group(['prefix' => 'mahasiswa', 'middleware' => 'guest'], function () {
+Route::group(['prefix' => 'mahasiswa', 'middleware' => 'mahasiswa'], function () {
     // Route::get('/home', 'HomeController@index')->name('mahasiswa.home');
 });

@@ -23,8 +23,8 @@ class CreateMahasiswaTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
 
-            $table->foreign('kelas')->references('kode_kelas')->on('kelas')
-                ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('kelas')->references('kode_kelas')->on('kelas')
+            //     ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

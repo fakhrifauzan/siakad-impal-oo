@@ -31,6 +31,7 @@ Route::resource('kelas', 'KelasController');
 Route::resource('matkul', 'MataKuliahController');
 Route::resource('jadwal', 'JadwalController');
 Route::resource('registrasi', 'RegistrasiController');
+Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
 
 Route::prefix('admin')->group(function () {
     // Route::resource('mahasiswa', 'MahasiswaController');

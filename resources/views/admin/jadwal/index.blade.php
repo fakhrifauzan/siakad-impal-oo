@@ -42,7 +42,7 @@
                       <td>{{ $view->semester }}</td>
                       <td>
                           <button type="button" class="btn btn-warning" data-toggle="modal" onclick="edit_jadwal({{ $view->id }})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                          <form action="/jadwal/{{ $view->id }}" method="post">
+                          <form action="{{ url('admin/jadwal') }}/{{ $view->id }}" method="post">
                               {{ csrf_field() }}
                               {{ method_field('DELETE') }}
                               <button type="submit" name="submit" value="Delete" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -78,7 +78,7 @@
                 <select id="selectDosen" class="form-control" name="kode_dosen">
                   <option selected>Choose...</option>
                   @foreach($dosen as $view)
-                      <option value="{{ $view->kode_dosen }}">{{ $view->kode_dosen }} | {{ $view->nama_dosen }}</option>
+                      <option value="{{ $view->kode_dosen }}">{{ $view->kode_dosen }} | {{ $view->user->name }}</option>
                   @endforeach
                 </select>
               </div>
@@ -175,7 +175,7 @@
             $('#myModal').modal('show'); // show bootstrap modal
             $('.modal-title').text('Tambah Jadwal'); // Set Title to Bootstrap modal title
             $('#formModal').attr('method','post');
-            $('#formModal').attr('action','{{ url('/jadwal') }}');
+            $('#formModal').attr('action','{{ route('admin.jadwal.store') }}');
         }
 
         function edit_jadwal(id) {
@@ -183,7 +183,7 @@
             // $('.form-group').removeClass('has-error'); // clear error class
             $('.help-block').hide(); // hide  error string
             $('.modal-title').text('Edit Jadwal'); // Set Title to Bootstrap modal title
-            $("#formModal").attr('action', '{{ url('/jadwal') }}/'+id);
+            $("#formModal").attr('action', '{{ url('admin/jadwal') }}/'+id);
             $('#formModal').attr('method','post');
             $('#formModal').prepend('{{ method_field('PUT') }}');
 

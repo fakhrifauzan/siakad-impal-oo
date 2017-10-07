@@ -18,7 +18,7 @@ class RegistrasiController extends Controller
     public function index()
     {
       $registrasi = Registrasi::all();
-      $mahasiswa = Mahasiswa::all();
+      $mahasiswa = Mahasiswa::with('user')->get();
       $statusReg = $this->getStatusRegistrasi();
       $tahunAjar = $this->getTahunAjar();
 

@@ -5,19 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Dosen;
+use Auth;
 
 class DosenController extends Controller
-{
-    /**
+{     
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $dosen = Dosen::all();
-
-        return view('admin.dosen.index', compact('dosen'));
+        if (Auth::user()->user_level == 'dosen') {
+            return view('dosen.index');
+        } else {
+            $dosen = Dosen::with('user')->get();            
+            return view('admin.dosen.index', compact('dosen'));
+        }
+               
     }
 
     /**

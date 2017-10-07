@@ -12,6 +12,16 @@ use App\Kelas;
 class JadwalController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+     public function __construct()
+     {
+         $this->middleware('auth');
+     }  
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -65,7 +75,7 @@ class JadwalController extends Controller
         'ruangan' => $request->ruangan,
       ]);
 
-      return redirect('/jadwal');
+      return redirect()->route('admin.jadwal.index');
     }
 
 
@@ -115,7 +125,7 @@ class JadwalController extends Controller
         'ruangan' => $request->ruangan,
       ]);
 
-      return redirect('/jadwal');
+      return redirect()->route('admin.jadwal.index');
     }
 
     /**
@@ -127,6 +137,6 @@ class JadwalController extends Controller
     public function destroy($id)
     {
       Jadwal::destroy($id);
-      return redirect('/jadwal');
+      return redirect()->route('admin.jadwal.index');
     }
 }

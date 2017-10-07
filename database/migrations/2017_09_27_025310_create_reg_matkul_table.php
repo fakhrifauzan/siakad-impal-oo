@@ -44,7 +44,7 @@ class CreateRegMatkulTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reg_matkul');
         Schema::dropIfExists('reg_matkul_jadwal');
+        Schema::dropIfExists('reg_matkul');        
     }
 }

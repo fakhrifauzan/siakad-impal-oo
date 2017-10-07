@@ -26,4 +26,12 @@ class Mahasiswa extends Model
     * @var array
     */
   protected $guarded = [];
+
+  /**
+  * Get the user that owns the mahasiswa.
+  */
+  public function user()
+  {
+      return $this->belongsTo('App\User', 'user_id', 'id');
+  }
 }

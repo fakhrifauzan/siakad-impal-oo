@@ -80,7 +80,7 @@
                 <select id="selectNIM" class="form-control" name="nim">
                   <option selected>Choose...</option>
                     @foreach($mahasiswa as $view)
-                        <option value="{{ $view->nim }}">{{ $view->nim }} | {{ $view->nama }}</option>
+                        <option value="{{ $view->nim }}">{{ $view->nim }} | {{ $view->user->name }}</option>
                     @endforeach
                 </select>
               </div>

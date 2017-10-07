@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
+-- version 4.5.4.1deb2ubuntu2
+-- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Sep 27, 2017 at 06:33 AM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 7.1.7
+-- Host: localhost
+-- Generation Time: Oct 07, 2017 at 08:17 AM
+-- Server version: 10.0.31-MariaDB-0ubuntu0.16.04.2
+-- PHP Version: 7.0.24-1+ubuntu16.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -61,6 +59,14 @@ CREATE TABLE `config` (
   `value` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`config`, `value`) VALUES
+('status_reg', 'Tidak Aktif'),
+('tahun_ajar', '1718/1');
+
 -- --------------------------------------------------------
 
 --
@@ -69,12 +75,16 @@ CREATE TABLE `config` (
 
 CREATE TABLE `dosen` (
   `kode_dosen` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama_dosen` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fakultas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dosen`
+--
+
+INSERT INTO `dosen` (`kode_dosen`, `user_id`, `status`) VALUES
+('AAA', 1, 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -92,6 +102,14 @@ CREATE TABLE `jadwal` (
   `ruangan` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `semester` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `jadwal`
+--
+
+INSERT INTO `jadwal` (`id`, `kode_dosen`, `kode_matkul`, `kode_kelas`, `hari`, `jam`, `ruangan`, `semester`) VALUES
+(1, 'AAA', 'PBD', 'IF-39-10', 'Selasa', '12.30 - 15.30', 'E302', '1516/1'),
+(2, 'AAA', 'PBD', 'IF-39-10', 'Senin', '09.30 - 12.30', 'B105', '1516/2');
 
 -- --------------------------------------------------------
 
@@ -121,21 +139,18 @@ INSERT INTO `kelas` (`kode_kelas`, `fakultas`, `prodi`, `doswal`) VALUES
 
 CREATE TABLE `mahasiswa` (
   `nim` int(11) NOT NULL,
-  `nama` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fakultas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `prodi` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `kelas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tahun_masuk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+  `tahun_masuk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `mahasiswa`
 --
 
-INSERT INTO `mahasiswa` (`nim`, `nama`, `fakultas`, `prodi`, `kelas`, `tahun_masuk`, `username`, `password`) VALUES
-(111, 'Adam Budi', 'Informatika', 'S1 Teknik Informatika', 'IF-39-10', '2015', '111', '111');
+INSERT INTO `mahasiswa` (`nim`, `user_id`, `prodi`, `kelas`, `tahun_masuk`) VALUES
+(111, 2, 'S1 Teknik Informatika', 'IF-39-10', '2017');
 
 -- --------------------------------------------------------
 
@@ -149,6 +164,13 @@ CREATE TABLE `matkul` (
   `sks` int(11) NOT NULL,
   `fakultas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `matkul`
+--
+
+INSERT INTO `matkul` (`kode_matkul`, `nama_matkul`, `sks`, `fakultas`) VALUES
+('PBD', 'Permodelan Basis Data', 4, 'Informatika');
 
 -- --------------------------------------------------------
 
@@ -167,19 +189,19 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2017_09_27_020734_create_dosen_table', 1),
-(4, '2017_09_27_022034_create_matkul_table', 1),
-(5, '2017_09_27_022307_create_admin_table', 1),
-(6, '2017_09_27_022404_create_mahasiswa_table', 1),
-(7, '2017_09_27_022548_create_paycheck_table', 1),
-(8, '2017_09_27_022718_create_config_table', 1),
-(9, '2017_09_27_023616_create_kelas_table', 1),
-(10, '2017_09_27_023737_create_jadwal_table', 1),
-(11, '2017_09_27_024431_create_registrasi_table', 1),
-(12, '2017_09_27_025043_create_nilai_table', 1),
-(13, '2017_09_27_025310_create_reg_matkul_table', 1);
+(20, '2014_10_12_000000_create_users_table', 1),
+(21, '2014_10_12_100000_create_password_resets_table', 1),
+(22, '2017_09_27_020734_create_dosen_table', 1),
+(23, '2017_09_27_022034_create_matkul_table', 1),
+(24, '2017_09_27_022307_create_admin_table', 1),
+(25, '2017_09_27_022404_create_mahasiswa_table', 1),
+(26, '2017_09_27_022548_create_paycheck_table', 1),
+(27, '2017_09_27_022718_create_config_table', 1),
+(28, '2017_09_27_023616_create_kelas_table', 1),
+(29, '2017_09_27_023737_create_jadwal_table', 1),
+(30, '2017_09_27_024431_create_registrasi_table', 1),
+(31, '2017_09_27_025043_create_nilai_table', 1),
+(32, '2017_09_27_025310_create_reg_matkul_table', 1);
 
 -- --------------------------------------------------------
 
@@ -269,8 +291,11 @@ CREATE TABLE `reg_matkul_jadwal` (
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fakultas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_level` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -280,8 +305,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Fakhri Fauzan', 'fazan697@gmail.com', '$2y$10$SkMnH9.WLJOSrZiXoECciexJsHn3XOzQnmkQvUjYPijG6vl9wZprO', NULL, '2017-09-26 21:03:26', '2017-09-26 21:03:26');
+INSERT INTO `users` (`id`, `name`, `fakultas`, `username`, `email`, `password`, `user_level`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Dosen', 'Informatika', 'dosen', 'dosen@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'dosen', 'oOaljKwVsHjxQ2XKOqq5LYCWWnRIKRrcnWY9nbGTKBDqW2xFnYBGFgxXeFVw', NULL, NULL),
+(2, 'Mahasiswa', 'Informatika', 'mahasiswa', 'mahasiswa@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'mahasiswa', 'oiWMRvNV5giitfs6sU8CcW8c2qpGKJIMJfzljBtCZ8u5jylqJKDxBHVAbgY7', NULL, NULL),
+(3, 'Admin', 'Admin', 'admin', 'admin@siakad.id', '$2a$06$FkUYj4/Kbcm5w0xkopI2WOxpHf.oRNOfpPC2K6ZzYV4/5mykceO8i', 'admin', 'JngbP4Mps1UjGbextWayqKAfV1RL3WhxzBxtNlf94eCmf7qP8Cl5E4CfGWxz', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -312,7 +339,7 @@ ALTER TABLE `config`
 --
 ALTER TABLE `dosen`
   ADD PRIMARY KEY (`kode_dosen`),
-  ADD UNIQUE KEY `dosen_username_unique` (`username`);
+  ADD KEY `dosen_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `jadwal`
@@ -327,14 +354,15 @@ ALTER TABLE `jadwal`
 -- Indexes for table `kelas`
 --
 ALTER TABLE `kelas`
-  ADD PRIMARY KEY (`kode_kelas`);
+  ADD PRIMARY KEY (`kode_kelas`),
+  ADD KEY `kelas_doswal_foreign` (`doswal`);
 
 --
 -- Indexes for table `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
   ADD PRIMARY KEY (`nim`),
-  ADD UNIQUE KEY `mahasiswa_username_unique` (`username`);
+  ADD KEY `mahasiswa_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `matkul`
@@ -395,6 +423,7 @@ ALTER TABLE `reg_matkul_jadwal`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_username_unique` (`username`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
@@ -415,12 +444,12 @@ ALTER TABLE `bukti_pembayaran`
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `nilai`
 --
@@ -445,7 +474,7 @@ ALTER TABLE `reg_matkul`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
@@ -457,12 +486,30 @@ ALTER TABLE `bukti_pembayaran`
   ADD CONSTRAINT `bukti_pembayaran_id_registrasi_foreign` FOREIGN KEY (`id_registrasi`) REFERENCES `registrasi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `dosen`
+--
+ALTER TABLE `dosen`
+  ADD CONSTRAINT `dosen_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `jadwal`
 --
 ALTER TABLE `jadwal`
   ADD CONSTRAINT `jadwal_kode_dosen_foreign` FOREIGN KEY (`kode_dosen`) REFERENCES `dosen` (`kode_dosen`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `jadwal_kode_kelas_foreign` FOREIGN KEY (`kode_kelas`) REFERENCES `kelas` (`kode_kelas`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `jadwal_kode_matkul_foreign` FOREIGN KEY (`kode_matkul`) REFERENCES `matkul` (`kode_matkul`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `kelas`
+--
+ALTER TABLE `kelas`
+  ADD CONSTRAINT `kelas_doswal_foreign` FOREIGN KEY (`doswal`) REFERENCES `dosen` (`kode_dosen`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `mahasiswa`
+--
+ALTER TABLE `mahasiswa`
+  ADD CONSTRAINT `mahasiswa_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `nilai`
@@ -489,7 +536,6 @@ ALTER TABLE `reg_matkul`
 ALTER TABLE `reg_matkul_jadwal`
   ADD CONSTRAINT `reg_matkul_jadwal_id_jadwal_foreign` FOREIGN KEY (`id_jadwal`) REFERENCES `jadwal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `reg_matkul_jadwal_id_reg_matkul_foreign` FOREIGN KEY (`id_reg_matkul`) REFERENCES `reg_matkul` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

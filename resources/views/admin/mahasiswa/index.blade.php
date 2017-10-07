@@ -26,8 +26,8 @@
               @foreach($mahasiswa as $view)
                   <tr>
                       <td>{{ $view->nim }}</td>
-                      <td>{{ $view->nama }}</td>
-                      <td>{{ $view->fakultas }}</td>
+                      <td>{{ $view->user->name }}</td>
+                      <td>{{ $view->user->fakultas }}</td>
                       <td>{{ $view->prodi }}</td>
                       <td>{{ $view->kelas }}</td>
                       <td>{{ $view->tahun_masuk }}</td>

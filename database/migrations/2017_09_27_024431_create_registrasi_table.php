@@ -44,7 +44,7 @@ class CreateRegistrasiTable extends Migration
      */
     public function down()
     {
-      Schema::dropIfExists('registrasi');
-      Schema::dropIfExists('bukti_pembayaran');
+        Schema::dropIfExists('bukti_pembayaran');
+        Schema::dropIfExists('registrasi');
     }
 }

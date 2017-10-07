@@ -15,11 +15,11 @@ class CreateDosenTable extends Migration
     {
         Schema::create('dosen', function (Blueprint $table) {
             $table->string('kode_dosen')->primary();
-            $table->string('nama_dosen');
-            $table->string('fakultas');
+            $table->integer('user_id')->unsigned();
             $table->string('status');
-            $table->string('username')->unique();
-            $table->string('password');
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -15,13 +15,13 @@ class CreateMahasiswaTable extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->integer('nim')->primary();
-            $table->string('nama');
-            $table->string('fakultas');
+            $table->integer('user_id')->unsigned();
             $table->string('prodi');
             $table->string('kelas');
-            $table->string('tahun_masuk');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->string('tahun_masuk');            
+
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')->onDelete('cascade');
 
             // $table->foreign('kelas')->references('kode_kelas')->on('kelas')
             //     ->onUpdate('cascade')->onDelete('cascade');

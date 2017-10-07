@@ -56,55 +56,64 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-            <a class="nav-link" href="{{ url('home') }}">
-              <i class="fa fa-fw fa-home"></i>
-              <span class="nav-link-text">
-                Dashboard</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('dosen') }}">
-              <i class="fa fa-fw fa-user-circle-o"></i>
-              <span class="nav-link-text">
-                Dosen</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('jadwal') }}">
-              <i class="fa fa-fw fa-calendar"></i>
-              <span class="nav-link-text">
-                Jadwal Perkuliahan</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('kelas') }}">
-              <i class="fa fa-fw fa-graduation-cap"></i>
-              <span class="nav-link-text">
-                Kelas</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('mahasiswa') }}">
-              <i class="fa fa-fw fa-user"></i>
-              <span class="nav-link-text">
-                Mahasiswa</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('matkul') }}">
-              <i class="fa fa-fw fa-book"></i>
-              <span class="nav-link-text">
-               Mata Kuliah</span>
-            </a>
-          </li>
-          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-            <a class="nav-link" href="{{ url('registrasi') }}">
-              <i class="fa fa-fw fa-pencil-square-o"></i>
-              <span class="nav-link-text">
-                Registasi</span>
-            </a>
-          </li>
+          @if (Auth::user()->user_level == 'admin')
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+              <a class="nav-link" href="{{ route('admin.home') }}">
+                <i class="fa fa-fw fa-home"></i>
+                <span class="nav-link-text">
+                  Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.dosen.index') }}">
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                <span class="nav-link-text">
+                  Dosen</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.jadwal.index') }}">
+                <i class="fa fa-fw fa-calendar"></i>
+                <span class="nav-link-text">
+                  Jadwal Perkuliahan</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.kelas.index') }}">
+                <i class="fa fa-fw fa-graduation-cap"></i>
+                <span class="nav-link-text">
+                  Kelas</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.mahasiswa.index') }}">
+                <i class="fa fa-fw fa-user"></i>
+                <span class="nav-link-text">
+                  Mahasiswa</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.matkul.index') }}">
+                <i class="fa fa-fw fa-book"></i>
+                <span class="nav-link-text">
+                Mata Kuliah</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('admin.registrasi.index') }}">
+                <i class="fa fa-fw fa-pencil-square-o"></i>
+                <span class="nav-link-text">
+                  Registasi</span>
+              </a>
+            </li>
+          @elseif (Auth::user()->user_level == 'dosen')
+              <!-- MENU NYA BELOM ADA -->
+          @elseif (Auth::user()->user_level == 'mahasiswa')
+              <!-- MENU NYA BELOM ADA -->
+          @else
+              <!-- MENU NYA BELOM ADA -->
+          @endif
+          
         </ul>
         <ul class="navbar-nav sidenav-toggler">
           <li class="nav-item">
@@ -115,9 +124,14 @@
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-              <a class="nav-link" href="{{ url('/logout') }}">
+              <a class="nav-link" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="fa fa-fw fa-sign-out"></i>
-                  Logout</a>
+                  Logout
+              </a>              
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  {{ csrf_field() }}
+              </form>
           </li>
         </ul>
       </div>

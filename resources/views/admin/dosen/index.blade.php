@@ -24,8 +24,8 @@
               @foreach($dosen as $view)
                   <tr>
                       <td>{{ $view->kode_dosen }}</td>
-                      <td>{{ $view->nama }}</td>
-                      <td>{{ $view->fakultas }}</td>
+                      <td>{{ $view->user->name }}</td>
+                      <td>{{ $view->user->fakultas }}</td>
                       <td>{{ $view->status }}</td>
                   </tr>
               @endforeach

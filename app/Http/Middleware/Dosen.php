@@ -18,7 +18,8 @@ class Dosen
     {
       if (Auth::check()) {
           if (Auth::user()->user_level != 'dosen') {
-            return abort(404, 'Unauthorized action.');
+            // return abort(404, 'Unauthorized action.');
+            return redirect(Auth::user()->user_level);            
           }
       } else {
           return redirect('/');

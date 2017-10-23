@@ -18,7 +18,8 @@ class Mahasiswa
     {
         if (Auth::check()) {
             if (Auth::user()->user_level != 'mahasiswa') {
-              return abort(404, 'Unauthorized action.');
+            //   return abort(404, 'Unauthorized action.');
+            return redirect(Auth::user()->user_level);
             }
         } else {
             return redirect('/');

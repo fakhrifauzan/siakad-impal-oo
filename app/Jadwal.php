@@ -26,4 +26,12 @@ class Jadwal extends Model
     * @var array
     */
   protected $guarded = ['id'];
+
+  /**
+   * Get the post that owns the comment.
+   */
+  public function dosen()
+  {
+    return $this->belongsTo('App\Dosen', 'kode_dosen', 'kode_dosen');
+  }
 }

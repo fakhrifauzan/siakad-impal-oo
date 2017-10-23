@@ -20,6 +20,7 @@
                 <th>Program Studi</th>
                 <th>Kelas</th>
                 <th>Tahun Masuk</th>
+                <th>Registrasi</th>
               </tr>
             </thead>
             <tbody>
@@ -31,6 +32,11 @@
                       <td>{{ $view->prodi }}</td>
                       <td>{{ $view->kode_kelas }}</td>
                       <td>{{ $view->tahun_masuk }}</td>
+                      <td>
+                        <a href='registasi/{{ $view->nim }}'>
+                            <button type='button' class='btn btn-primary'>Detail Registrasi</button>
+                        </a>
+                      </td>
                   </tr>
               @endforeach
             </tbody>

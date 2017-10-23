@@ -12,6 +12,7 @@ class Dosen extends Model
    * @var string
    */
   protected $table = 'dosen';
+  // protected $primaryKey = 'kode_dosen';
 
   /**
    * Indicates if the model should be timestamped.
@@ -33,5 +34,14 @@ class Dosen extends Model
   public function user()
   {
       return $this->belongsTo('App\User', 'user_id', 'id');
+  }
+
+  public function jadwal()
+  {
+      return $this->hasMany('App\Jadwal', 'kode_dosen', 'kode_dosen');
+  }
+
+  public function kelas(){
+      return $this->hasMany('App\Kelas', 'doswal', 'kode_dosen');
   }
 }

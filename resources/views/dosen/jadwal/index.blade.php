@@ -7,30 +7,33 @@
     <div class="card mb-3">
       <div class="card-header">
         <i class="fa fa-table"></i>
-        Data Mahasiswa
+        Data Jadwal
       </div>
       <div class="card-body">
+      <br>
         <div class="table-responsive">
           <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
             <thead>
               <tr>
-                <th>NIM</th>
-                <th>Nama</th>
-                <th>Fakultas</th>
-                <th>Program Studi</th>
+                <th>Kode Dosen</th>
+                <th>Mata Kuliah</th>
                 <th>Kelas</th>
-                <th>Tahun Masuk</th>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Ruangan</th>
+                <th>Semester</th>
               </tr>
             </thead>
             <tbody>
-              @foreach($mahasiswa as $view)
+              @foreach($jadwal as $view)
                   <tr>
-                      <td>{{ $view->nim }}</td>
-                      <td>{{ $view->user->name }}</td>
-                      <td>{{ $view->user->fakultas }}</td>
-                      <td>{{ $view->prodi }}</td>
+                      <td>{{ $view->kode_dosen }}</td>
+                      <td>{{ $view->kode_matkul }}</td>
                       <td>{{ $view->kode_kelas }}</td>
-                      <td>{{ $view->tahun_masuk }}</td>
+                      <td>{{ $view->hari }}</td>
+                      <td>{{ $view->jam }}</td>
+                      <td>{{ $view->ruangan }}</td>
+                      <td>{{ $view->semester }}</td>
                   </tr>
               @endforeach
             </tbody>
@@ -41,4 +44,5 @@
 
   </div>
   <!-- /.container-fluid -->
+
 @endsection

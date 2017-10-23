@@ -8,6 +8,8 @@ use App\Jadwal;
 use App\Dosen;
 use App\MataKuliah;
 use App\Kelas;
+use App\User;
+use Auth;
 
 class JadwalController extends Controller
 {
@@ -17,13 +19,18 @@ class JadwalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-      $jadwal = Jadwal::all();
-      $dosen = Dosen::all();
-      $matkul = MataKuliah::all();
-      $kelas = Kelas::all();
-
-      return view('admin.jadwal.index', compact('jadwal', 'dosen', 'matkul', 'kelas'));
+    {    
+      if (Auth::user()->user_level == 'admin') {
+        $jadwal = Jadwal::all();
+        $dosen = Dosen::all();
+        $matkul = MataKuliah::all();
+        $kelas = Kelas::all();  
+        return view('admin.jadwal.index', compact('jadwal', 'dosen', 'matkul', 'kelas'));
+      } else if (Auth::user()->user_level == 'dosen') {
+          $jadwal = Jadwal::with('dosen')->where('kode_dosen', Auth::user()->dosen->kode_dosen)->get();
+          // dd($jadwal);            
+          return view('dosen.jadwal.index', compact('jadwal'));
+      }
     }
 
     /**
@@ -128,5 +135,23 @@ class JadwalController extends Controller
     {
       Jadwal::destroy($id);
       return redirect()->route('admin.jadwal.index');
+    }
+
+    public function getJadwalSementara(){
+      if ($this->getStatusRegistrasi() == 'Tidak Aktif') {
+        $jadwal = false;
+        return view('mahasiswa.registrasi.jadwal.index', compact('jadwal'));
+      } else {
+        $jadwal = DB::table('jadwal')
+        ->join('matkul', 'jadwal.kode_matkul', '=', 'matkul.kode_matkul')
+        ->join('reg_matkul_jadwal', 'jadwal.id', '=', 'reg_matkul_jadwal.id_jadwal')      
+        ->join('reg_matkul', 'reg_matkul.id', '=', 'reg_matkul_jadwal.id_reg_matkul')      
+        ->where('reg_matkul.semester', $this->getTahunAjar())
+        ->where('nim', Auth::user()->mahasiswa->nim)
+        ->where('status', 'simpan')
+        ->orWhere('status', 'siap')
+        ->get();
+        return view('mahasiswa.registrasi.jadwal.index', compact('jadwal'));
+      }
     }
 }

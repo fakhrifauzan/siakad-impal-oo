@@ -24,12 +24,10 @@ Route::get('/logout',function(){
 
 //bypass login
 
-
-
-Route::get('/mahasiswa', 'MahasiswaController@index')->middleware('mahasiswa');
-Route::get('/dosen', 'DosenController@index')->middleware('dosen');
-Route::get('/admin', 'AdminController@index')->middleware('admin');
-Route::get('/paycheck', 'AdminController@index')->middleware('admin');
+Route::get('/mahasiswa', 'MahasiswaController@index')->middleware('mahasiswa')->name('mhs');
+Route::get('/dosen', 'DosenController@index')->middleware('dosen')->name('dsn');
+Route::get('/admin', 'AdminController@index')->middleware('admin')->name('adm');
+Route::get('/paycheck', 'AdminController@index')->middleware('admin')->name('pyc');
 // Route::get('/kelas', 'KelasController@index');
 // Route::get('/matkul', 'MataKuliahController@index');
 // Route::get('/jadwal', 'JadwalController@index');
@@ -66,12 +64,35 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
         'index' => 'admin.registrasi.index'
     ]]);
     Route::post('/registrasi/updateConfig', 'RegistrasiController@setKonfigurasiRegistrasi');
+    Route::get('/registrasi/bukti/{id}/edit', 'RegistrasiController@bukti');
 });
 
 Route::group(['prefix' => 'dosen', 'middleware' => 'dosen'], function () {
     Route::get('/home', 'DosenController@index')->name('dosen.home');
+    Route::resource('jadwal', 'JadwalController', ['names' => [
+        'index' => 'dosen.jadwal.index',
+    ]]);
+    Route::resource('kelas', 'KelasController', ['names' => [
+        'index' => 'dosen.kelas.index'
+    ]]);
 });
 
 Route::group(['prefix' => 'mahasiswa', 'middleware' => 'mahasiswa'], function () {
-    // Route::get('/home', 'HomeController@index')->name('mahasiswa.home');
+    Route::get('/home', 'MahasiswaController@index')->name('mahasiswa.home');
+    Route::resource('registrasi', 'RegistrasiController', ['names' => [
+        'index' => 'mahasiswa.registrasi.index'
+    ]]);
+    Route::get('/registrasi/tagihan/{id}/get', 'RegistrasiController@get_tagihan');
+    Route::get('/registrasi/matkul', 'RegistrasiController@getDataRegistrasiSmtIni')->name('mahasiswa.registrasi.matkul.index'); 
+    Route::post('/registrasi/tagihan', 'RegistrasiController@uploadBuktiPembayaran');
+       
+});
+
+Route::group(['prefix' => 'paycheck', 'middleware' => 'paycheck'], function () {
+    Route::get('/home', 'PaycheckController@index')->name('paycheck.home');
+    Route::resource('registrasi', 'RegistrasiController', ['names' => [
+        'index' => 'paycheck.registrasi.index'
+    ]]);
+    Route::get('/registrasi/bukti/{id}/edit', 'RegistrasiController@bukti');
+    Route::put('/registrasi/bukti/{id}', 'RegistrasiController@verifikasi_bukti');
 });

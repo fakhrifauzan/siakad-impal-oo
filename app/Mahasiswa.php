@@ -34,4 +34,8 @@ class Mahasiswa extends Model
   {
       return $this->belongsTo('App\User', 'user_id', 'id');
   }
+
+  public function kelas(){
+      return $this->hasOne('App\Kelas', 'kode_kelas', 'kode_kelas');
+  }
 }

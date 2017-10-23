@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Kelas;
+use App\Mahasiswa;
+use Auth;
 
 class KelasController extends Controller
 {
@@ -14,10 +16,15 @@ class KelasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-      $kelas = Kelas::all();
-
-      return view('admin.kelas.index', compact('kelas'));
+    {    
+      if (Auth::user()->user_level == 'admin') {
+        $kelas = Kelas::all();        
+        return view('admin.kelas.index', compact('kelas'));
+      } else if (Auth::user()->user_level == 'dosen') {
+        $kelas = Kelas::with('dosen')->where('doswal', Auth::user()->dosen->kode_dosen)->get();
+        // dd($kelas);            
+        return view('dosen.kelas.index', compact('kelas'));
+      }
     }
 
     /**
@@ -49,7 +56,13 @@ class KelasController extends Controller
      */
     public function show($id)
     {
-        //
+        $mahasiswa = Mahasiswa::with('kelas')->where('kode_kelas', $id)->get();
+        if (!$mahasiswa) {
+            return redirect('/kelas');
+        }
+        // dd($post);
+        return view('dosen.kelas.show', compact('mahasiswa'));
+        
     }
 
     /**

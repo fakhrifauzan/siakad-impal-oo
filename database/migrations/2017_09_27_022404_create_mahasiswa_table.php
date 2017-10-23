@@ -17,7 +17,7 @@ class CreateMahasiswaTable extends Migration
             $table->integer('nim')->primary();
             $table->integer('user_id')->unsigned();
             $table->string('prodi');
-            $table->string('kelas');
+            $table->string('kode_kelas');
             $table->string('tahun_masuk');            
 
             $table->foreign('user_id')->references('id')->on('users')

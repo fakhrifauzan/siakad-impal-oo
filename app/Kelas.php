@@ -26,4 +26,14 @@ class Kelas extends Model
     * @var array
     */
   protected $guarded = [];
+
+  public function dosen()
+  {
+      return $this->belongsTo('App\Dosen', 'doswal', 'kode_dosen');
+  }
+  
+  public function mahasiswa()
+  {
+      return $this->belongsTo('App\Mahasiswa', 'kode_kelas', 'kode_kelas');
+  }
 }

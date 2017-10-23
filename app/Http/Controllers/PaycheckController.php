@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-use App\Mahasiswa;
-use Auth;
-
-class MahasiswaController extends Controller
+class PaycheckController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,20 +13,7 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->user_level == 'mahasiswa') {
-            return view('mahasiswa.index');
-            // DB::table('bukti_pembayaran')->insert([
-            //     'id_registrasi' => '4',
-            //     'tanggal' => '10-09-2017',
-            //     'bank' => 'Bank Mandiri',
-            //     'jumlah' => '9000000',
-            //     'pemilik_norek' => 'Fakhri Fauzan',
-            // ]);
-        } else {
-            // $mahasiswa = Mahasiswa::with('user')->get();
-            $mahasiswa = Mahasiswa::all();
-            return view('admin.mahasiswa.index', compact('mahasiswa'));
-        }        
+        return view('paycheck.index');
     }
 
     /**

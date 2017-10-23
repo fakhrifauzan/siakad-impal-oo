@@ -103,15 +103,68 @@
               <a class="nav-link" href="{{ route('admin.registrasi.index') }}">
                 <i class="fa fa-fw fa-pencil-square-o"></i>
                 <span class="nav-link-text">
-                  Registasi</span>
+                  Registrasi</span>
               </a>
             </li>
           @elseif (Auth::user()->user_level == 'dosen')
-              <!-- MENU NYA BELOM ADA -->
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+            <a class="nav-link" href="{{ route('dosen.home') }}">
+              <i class="fa fa-fw fa-home"></i>
+              <span class="nav-link-text">
+                Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <a class="nav-link" href="{{ route('dosen.jadwal.index') }}">
+              <i class="fa fa-fw fa-book"></i>
+              <span class="nav-link-text">
+                Jadwal Perkuliahan</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <a class="nav-link" href="{{ route('dosen.kelas.index') }}">
+              <i class="fa fa-fw fa-table"></i>
+              <span class="nav-link-text">
+                Dosen Wali</span>
+            </a>
+          </li>
           @elseif (Auth::user()->user_level == 'mahasiswa')
-              <!-- MENU NYA BELOM ADA -->
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+              <a class="nav-link" href="{{ route('mahasiswa.home') }}">
+                <i class="fa fa-fw fa-home"></i>
+                <span class="nav-link-text">
+                  Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('mahasiswa.registrasi.matkul.index') }}">
+                <i class="fa fa-fw fa-sticky-note-o"></i>
+                <span class="nav-link-text">
+                  Registrasi Mata Kuliah</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('mahasiswa.registrasi.index') }}">
+                <i class="fa fa-fw fa-sticky-note-o"></i>
+                <span class="nav-link-text">
+                  Tagihan Registrasi</span>
+              </a>
+            </li>
           @else
-              <!-- MENU NYA BELOM ADA -->
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+              <a class="nav-link" href="{{ route('paycheck.home') }}">
+                <i class="fa fa-fw fa-home"></i>
+                <span class="nav-link-text">
+                  Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('paycheck.registrasi.index') }}">
+                <i class="fa fa-fw fa-table"></i>
+                <span class="nav-link-text">
+                  Registrasi</span>
+              </a>
+            </li>
           @endif
           
         </ul>

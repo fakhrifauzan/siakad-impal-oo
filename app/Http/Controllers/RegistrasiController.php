@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Registrasi;
 use App\Mahasiswa;
+use Auth;
 
 class RegistrasiController extends Controller
 {
@@ -17,12 +18,22 @@ class RegistrasiController extends Controller
      */
     public function index()
     {
-      $registrasi = Registrasi::all();
-      $mahasiswa = Mahasiswa::with('user')->get();
-      $statusReg = $this->getStatusRegistrasi();
-      $tahunAjar = $this->getTahunAjar();
-
-      return view('admin.registrasi.index', compact('registrasi', 'mahasiswa', 'statusReg', 'tahunAjar'));
+      if (Auth::user()->user_level == 'mahasiswa') {
+        $registrasi = Registrasi::where('nim', Auth::user()->mahasiswa->nim)->get();
+        return view('mahasiswa.registrasi.index', compact('registrasi'));
+      } else {
+        $registrasi = Registrasi::all();
+        $mahasiswa = Mahasiswa::with('user')->get();
+        $statusReg = $this->getStatusRegistrasi();
+        $tahunAjar = $this->getTahunAjar();
+  
+        if (Auth::user()->user_level == 'admin') {
+          return view('admin.registrasi.index', compact('registrasi', 'mahasiswa', 'statusReg', 'tahunAjar'));
+        } else {
+          // dd($registrasi);
+          return view('paycheck.registrasi.index', compact('registrasi', 'mahasiswa', 'statusReg', 'tahunAjar'));
+        }
+      }
     }
 
     /**
@@ -58,7 +69,7 @@ class RegistrasiController extends Controller
         'status' => $request->status,
       ]);
 
-      return redirect('/registrasi');
+      return redirect('/admin/registrasi');
     }
 
     /**
@@ -103,7 +114,7 @@ class RegistrasiController extends Controller
         'status' => $request->status,
       ]);
 
-      return redirect('/registrasi');
+      return redirect('/admin/registrasi');
     }
 
     /**
@@ -115,7 +126,56 @@ class RegistrasiController extends Controller
     public function destroy($id)
     {
       Registrasi::destroy($id);
-      return redirect('/registrasi');
+      return redirect('/admin/registrasi');
+    }
+
+    public function get_tagihan($id)
+    {
+      $tagihan = Registrasi::where('id', $id)->get();
+      // dd($bukti);
+      return $tagihan->toJson();
+    }
+
+    public function uploadBuktiPembayaran(Request $request){
+      // dd($request);
+      $request->validate([
+        'id_registrasi' => 'required',
+        'tgl_transfer' => 'required',
+        'bank' => 'required',
+        'jumlah' => 'required',
+        'pemilik_rek' => 'required',
+      ]);      
+
+      DB::table('bukti_pembayaran')->insert([
+          'id_registrasi' => $request->id_registrasi,
+          'tanggal' => $request->tgl_transfer,
+          'bank' => $request->bank,
+          'jumlah' => $request->jumlah,
+          'pemilik_norek' => $request->pemilik_rek,
+      ]);
+
+      return redirect('/mahasiswa/registrasi');
+    }
+
+    public function bukti($id)
+    {
+      $bukti = DB::table('registrasi')
+              ->join('bukti_pembayaran', 'registrasi.id', '=', 'bukti_pembayaran.id_registrasi')
+              ->where('bukti_pembayaran.id_registrasi', $id)
+              ->orderBy('bukti_pembayaran.id', 'desc')
+              ->get();
+      // dd($bukti);
+      return $bukti->toJson();
+    }
+
+    public function verifikasi_bukti(Request $request)
+    {
+      $registrasi = Registrasi::find($request->id_registrasi);
+      $registrasi->update([
+        'status' => 'Lunas',
+      ]);
+
+      return redirect('/paycheck/registrasi');
     }
 
     public function getStatusRegistrasi(){
@@ -140,6 +200,53 @@ class RegistrasiController extends Controller
       DB::table('config')->where('config', 'tahun_ajar')
             ->update(['value' => $request->tahun_ajar]);
 
-      return redirect('/registrasi');
+      return redirect('/admin/registrasi');
+    }
+
+    public function getDataRegistrasiSmtIni() {
+      if ($this->getStatusRegistrasi() == 'Tidak Aktif') {
+        $matkul = [];        
+      } else {
+        $matkul = DB::table('jadwal')
+                ->join('matkul', 'matkul.kode_matkul', '=', 'jadwal.kode_matkul')
+                ->where('semester', $this->getTahunAjar())
+                ->where('fakultas', Auth::user()->fakultas)
+                ->first();
+      }
+      return view('mahasiswa.registrasi.matkul.index', compact('matkul'));
+    }
+
+
+    public function simpanKrs(Request $request) {
+      dd($request);
+      $cek = DB::table('reg_matkul')->where('nim', $request->nim)->where('semester', $request->semester)->first();
+      if ($cek >= 1){
+        $id = $cek->id;
+        DB::table('reg_matkul_jadwal')->where('id_reg_matkul', '=', $id)->delete();
+      } else {
+        $id = DB::table('reg_matkul')->insertGetId([
+                'nim' => $request->nim,
+                'semester' => $request->semester,
+                'status' => $request->status,          
+              ]);
+      }
+      foreach ($request->id_jadwal as $jadwal) {
+        DB::table('reg_matkul_jadwal')->insert([
+          'id_reg_matkul' => $id,
+          'id_jadwal' => $jadwal,
+        ]);
+      }
+      return redirect('/mahasiswa/registrasi');
+    }
+
+    public function setSiapAcc(Request $request) {
+      DB::table('reg_matkul')
+      ->where('config', 'tahun_ajar')
+      ->update([
+        'status' => 'siap',
+        'nim' => Auth::user()->mahasiswa->nim,
+        'semester' => $this->getTahunAjar(),
+      ]);
+      return redirect('/mahasiswa/registrasi');
     }
 }

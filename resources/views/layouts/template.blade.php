@@ -122,6 +122,13 @@
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <a class="nav-link" href="{{ route('dosen.nilai.index') }}">
+              <i class="fa fa-fw fa-sticky-note"></i>
+              <span class="nav-link-text">
+                Nilai</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
             <a class="nav-link" href="{{ route('dosen.kelas.index') }}">
               <i class="fa fa-fw fa-table"></i>
               <span class="nav-link-text">
@@ -137,8 +144,22 @@
               </a>
             </li>
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('mahasiswa.jadwal.index') }}">
+                <i class="fa fa-fw fa-calendar"></i>
+                <span class="nav-link-text">
+                  Jadwal Perkuliahan</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+              <a class="nav-link" href="{{ route('mahasiswa.nilai.index') }}">
+                <i class="fa fa-fw fa-sticky-note"></i>
+                <span class="nav-link-text">
+                  Nilai</span>
+              </a>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
               <a class="nav-link" href="{{ route('mahasiswa.registrasi.matkul.index') }}">
-                <i class="fa fa-fw fa-sticky-note-o"></i>
+                <i class="fa fa-fw fa-pencil-square-o"></i>
                 <span class="nav-link-text">
                   Registrasi Mata Kuliah</span>
               </a>

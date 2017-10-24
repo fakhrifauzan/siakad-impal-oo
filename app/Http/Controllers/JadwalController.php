@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Jadwal;
 use App\Dosen;
@@ -30,6 +31,17 @@ class JadwalController extends Controller
           $jadwal = Jadwal::with('dosen')->where('kode_dosen', Auth::user()->dosen->kode_dosen)->get();
           // dd($jadwal);            
           return view('dosen.jadwal.index', compact('jadwal'));
+      } else {
+        $jadwal = DB::table('jadwal')
+        ->join('matkul', 'jadwal.kode_matkul', '=', 'matkul.kode_matkul')
+        ->join('reg_matkul_jadwal', 'jadwal.id', '=', 'reg_matkul_jadwal.id_jadwal')      
+        ->join('reg_matkul', 'reg_matkul.id', '=', 'reg_matkul_jadwal.id_reg_matkul')      
+        ->where('reg_matkul.semester', $this->getTahunAjar())
+        ->where('nim', Auth::user()->mahasiswa->nim)
+        ->where('status', 'ok')
+        ->get();
+        // dd($jadwal);
+        return view('mahasiswa.jadwal.index', compact('jadwal'));
       }
     }
 
@@ -137,10 +149,21 @@ class JadwalController extends Controller
       return redirect()->route('admin.jadwal.index');
     }
 
+    public function getStatusRegistrasi(){
+      $config = DB::table('config')->where('config', 'status_reg')->first();
+      return $config->value;
+    }
+
+    public function getTahunAjar(){
+      $config = DB::table('config')->where('config', 'tahun_ajar')->first();
+      return $config->value;
+    }
+
     public function getJadwalSementara(){
       if ($this->getStatusRegistrasi() == 'Tidak Aktif') {
-        $jadwal = false;
-        return view('mahasiswa.registrasi.jadwal.index', compact('jadwal'));
+        $jadwal = [];
+        // return view('mahasiswa.registrasi.jadwal.index', compact('jadwal'));
+        return view('mahasiswa.jadwal.sementara', compact('jadwal'));        
       } else {
         $jadwal = DB::table('jadwal')
         ->join('matkul', 'jadwal.kode_matkul', '=', 'matkul.kode_matkul')
@@ -151,7 +174,14 @@ class JadwalController extends Controller
         ->where('status', 'simpan')
         ->orWhere('status', 'siap')
         ->get();
-        return view('mahasiswa.registrasi.jadwal.index', compact('jadwal'));
+        // dd($jadwal);
+        return view('mahasiswa.jadwal.sementara', compact('jadwal'));
       }
+    }
+
+    public function getDataJadwalDosenSmtIni(){
+      $jadwal = Jadwal::with('dosen')->where('kode_dosen', Auth::user()->dosen->kode_dosen)->where('semester',$this->getTahunAjar())->get();
+      // dd($jadwal);            
+      return view('dosen.nilai.index', compact('jadwal'));
     }
 }

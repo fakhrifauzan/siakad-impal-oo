@@ -204,49 +204,145 @@ class RegistrasiController extends Controller
     }
 
     public function getDataRegistrasiSmtIni() {
-      if ($this->getStatusRegistrasi() == 'Tidak Aktif') {
+      $status = $this->getStatusAcc();
+      $stat_reg = $this->getStatusRegistrasi();
+      if ($stat_reg == 'Tidak Aktif') {
         $matkul = [];        
+        $pilihan = [];        
       } else {
         $matkul = DB::table('jadwal')
                 ->join('matkul', 'matkul.kode_matkul', '=', 'jadwal.kode_matkul')
                 ->where('semester', $this->getTahunAjar())
                 ->where('fakultas', Auth::user()->fakultas)
-                ->first();
+                ->get();
+        $pilihan = DB::table('reg_matkul')
+                ->join('reg_matkul_jadwal', 'reg_matkul.id', '=', 'reg_matkul_jadwal.id_reg_matkul')
+                ->where('semester', $this->getTahunAjar())
+                ->where('nim', Auth::user()->mahasiswa->nim)
+                ->get();
       }
-      return view('mahasiswa.registrasi.matkul.index', compact('matkul'));
+      // dd($pilihan);
+      return view('mahasiswa.registrasi.matkul.index', compact('matkul', 'status', 'pilihan', 'stat_reg'));
     }
 
+    public function submitReg(Request $request) {
+      // dd($request);
+      if ($request->siapAcc == 'siapAcc') {
+        $this->setSiapAcc($request);
+      } else if ($request->simpan == 'simpan') {
+        $this->simpanKrs($request);
+      }     
+      return redirect('/mahasiswa/registrasi/matkul');
+    }
 
     public function simpanKrs(Request $request) {
-      dd($request);
-      $cek = DB::table('reg_matkul')->where('nim', $request->nim)->where('semester', $request->semester)->first();
-      if ($cek >= 1){
-        $id = $cek->id;
+      // dd($request);
+      $nim = Auth::user()->mahasiswa->nim;
+      $semester = $this->getTahunAjar();
+      $cek = DB::table('reg_matkul')->where('nim', $nim)->where('semester', $semester)->first();
+      if ($cek != null){
+        $id = $cek->id;  
         DB::table('reg_matkul_jadwal')->where('id_reg_matkul', '=', $id)->delete();
       } else {
         $id = DB::table('reg_matkul')->insertGetId([
-                'nim' => $request->nim,
-                'semester' => $request->semester,
-                'status' => $request->status,          
+                'nim' => $nim,
+                'semester' => $semester,
+                'status' => 'simpan',          
               ]);
       }
-      foreach ($request->id_jadwal as $jadwal) {
-        DB::table('reg_matkul_jadwal')->insert([
-          'id_reg_matkul' => $id,
-          'id_jadwal' => $jadwal,
-        ]);
+      if ($request->jadwal != null) {
+        foreach ($request->jadwal as $jadwal) {
+          DB::table('reg_matkul_jadwal')->insert([
+            'id_reg_matkul' => $id,
+            'id_jadwal' => $jadwal,
+          ]);
+        }
       }
-      return redirect('/mahasiswa/registrasi');
     }
 
     public function setSiapAcc(Request $request) {
+      $nim = Auth::user()->mahasiswa->nim;
+      $semester = $this->getTahunAjar();
       DB::table('reg_matkul')
-      ->where('config', 'tahun_ajar')
+      ->where('nim', $nim)
+      ->where('semester', $semester)
       ->update([
         'status' => 'siap',
-        'nim' => Auth::user()->mahasiswa->nim,
-        'semester' => $this->getTahunAjar(),
       ]);
-      return redirect('/mahasiswa/registrasi');
     }
+
+    public function getStatusAcc() {
+      $nim = Auth::user()->mahasiswa->nim;
+      $semester = $this->getTahunAjar();
+      $cek = DB::table('reg_matkul')
+              ->where('nim', Auth::user()->mahasiswa->nim)
+              ->where('semester', $this->getTahunAjar())
+              ->value('status');
+      // dd($cek);
+      if ($cek == null) {
+        DB::table('reg_matkul')->insert([
+          'nim' => $nim,
+          'semester' => $semester,
+          'status' => 'simpan',
+        ]);
+        return 'simpan';
+      }
+      return $cek;
+    }
+
+    public function getStatusAccMhs($nim) {
+      $semester = $this->getTahunAjar();
+      $cek = DB::table('reg_matkul')
+              ->where('nim', $nim)
+              ->where('semester', $this->getTahunAjar())
+              ->value('status');
+      return $cek;
+    }
+
+    public function getJadwalSementaraMhs($nim){
+      $statusReg = $this->getStatusRegistrasi();
+      $tahunAjar = $this->getTahunAjar();
+      $statusAcc = $this->getStatusAccMhs($nim);
+
+      $jadwal = DB::table('jadwal')
+      ->join('matkul', 'jadwal.kode_matkul', '=', 'matkul.kode_matkul')
+      ->join('reg_matkul_jadwal', 'jadwal.id', '=', 'reg_matkul_jadwal.id_jadwal')      
+      ->join('reg_matkul', 'reg_matkul.id', '=', 'reg_matkul_jadwal.id_reg_matkul')      
+      ->where('reg_matkul.semester', $tahunAjar)
+      ->where('nim', $nim)
+      ->get();
+      // dd($jadwal);
+      return view('dosen.perwalian.index', compact('jadwal', 'statusReg', 'statusAcc', 'nim'));
+    }
+
+    public function setAccRegistrasi($nim){
+      $tahunAjar = $this->getTahunAjar();
+      DB::table('reg_matkul')
+      ->where('nim', $nim)
+      ->where('semester', $tahunAjar)
+      ->update([
+        'status' => 'ok',
+      ]);
+    }
+
+    public function setCancelRegistrasi($nim){
+      $tahunAjar = $this->getTahunAjar();
+      DB::table('reg_matkul')
+      ->where('nim', $nim)
+      ->where('semester', $tahunAjar)
+      ->update([
+        'status' => 'simpan',
+      ]);
+    }
+
+    public function accReg(Request $request) {
+      // dd($request);
+      if ($request->okeAcc == 'okeAcc') {
+        $this->setAccRegistrasi($request->nim);
+      } else if ($request->batal == 'batal') {
+        $this->setCancelRegistrasi($request->nim);
+      }    
+      return redirect('/dosen/kelas/perwalian/' . $request->nim);
+    }
+
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2017 at 08:17 AM
+-- Generation Time: Oct 24, 2017 at 08:15 PM
 -- Server version: 10.0.31-MariaDB-0ubuntu0.16.04.2
 -- PHP Version: 7.0.24-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -48,6 +48,16 @@ CREATE TABLE `bukti_pembayaran` (
   `pemilik_norek` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bukti_pembayaran`
+--
+
+INSERT INTO `bukti_pembayaran` (`id`, `id_registrasi`, `tanggal`, `bank`, `jumlah`, `pemilik_norek`) VALUES
+(1, 1, '10/19/2008', 'Bank Mandiri', 9000000, 'Isfarudi'),
+(2, 3, '09/28/2017', 'Bank BNI', 8900000, 'Fakhri Fauzan\r\n'),
+(4, 4, '2017-10-09', 'Bank Mandiri', 9000000, 'Fakhri Fauzan'),
+(5, 4, '2017-10-21', 'Bank Mandiri', 9000000, 'sadasasd');
+
 -- --------------------------------------------------------
 
 --
@@ -65,7 +75,7 @@ CREATE TABLE `config` (
 
 INSERT INTO `config` (`config`, `value`) VALUES
 ('status_reg', 'Tidak Aktif'),
-('tahun_ajar', '1718/1');
+('tahun_ajar', '1516/1');
 
 -- --------------------------------------------------------
 
@@ -108,8 +118,9 @@ CREATE TABLE `jadwal` (
 --
 
 INSERT INTO `jadwal` (`id`, `kode_dosen`, `kode_matkul`, `kode_kelas`, `hari`, `jam`, `ruangan`, `semester`) VALUES
-(1, 'AAA', 'PBD', 'IF-39-10', 'Selasa', '12.30 - 15.30', 'E302', '1516/1'),
-(2, 'AAA', 'PBD', 'IF-39-10', 'Senin', '09.30 - 12.30', 'B105', '1516/2');
+(1, 'AAA', 'PBD', 'IF-39-10', 'Selasa', '12.30 - 15.30', 'A307', '1516/1'),
+(2, 'AAA', 'PBD', 'IF-39-10', 'Senin', '09.30 - 12.30', 'B105', '1516/2'),
+(3, 'AAA', 'PBD', 'IF-39-10', 'Selasa', '09.30 - 12.30', 'A307', '1516/1');
 
 -- --------------------------------------------------------
 
@@ -141,7 +152,7 @@ CREATE TABLE `mahasiswa` (
   `nim` int(11) NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `prodi` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `kelas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kode_kelas` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tahun_masuk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -149,7 +160,7 @@ CREATE TABLE `mahasiswa` (
 -- Dumping data for table `mahasiswa`
 --
 
-INSERT INTO `mahasiswa` (`nim`, `user_id`, `prodi`, `kelas`, `tahun_masuk`) VALUES
+INSERT INTO `mahasiswa` (`nim`, `user_id`, `prodi`, `kode_kelas`, `tahun_masuk`) VALUES
 (111, 2, 'S1 Teknik Informatika', 'IF-39-10', '2017');
 
 -- --------------------------------------------------------
@@ -219,6 +230,13 @@ CREATE TABLE `nilai` (
   `indeks` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `nilai`
+--
+
+INSERT INTO `nilai` (`id`, `id_jadwal`, `nim`, `kuis`, `uts`, `uas`, `indeks`) VALUES
+(2, 1, 111, 36, 85, 48, 'C');
+
 -- --------------------------------------------------------
 
 --
@@ -258,6 +276,15 @@ CREATE TABLE `registrasi` (
   `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `registrasi`
+--
+
+INSERT INTO `registrasi` (`id`, `nim`, `semester`, `tagihan`, `status`) VALUES
+(1, 111, '1516/1', 4500000, 'Lunas'),
+(3, 111, '1617/1', 6670000, 'Lunas'),
+(4, 111, '1718/2', 123456789, 'Lunas');
+
 -- --------------------------------------------------------
 
 --
@@ -271,6 +298,14 @@ CREATE TABLE `reg_matkul` (
   `status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `reg_matkul`
+--
+
+INSERT INTO `reg_matkul` (`id`, `nim`, `semester`, `status`) VALUES
+(1, 111, '1516/1', 'ok'),
+(7, 111, '1516/2', 'simpan');
+
 -- --------------------------------------------------------
 
 --
@@ -281,6 +316,13 @@ CREATE TABLE `reg_matkul_jadwal` (
   `id_reg_matkul` int(10) UNSIGNED NOT NULL,
   `id_jadwal` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reg_matkul_jadwal`
+--
+
+INSERT INTO `reg_matkul_jadwal` (`id_reg_matkul`, `id_jadwal`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -306,9 +348,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `fakultas`, `username`, `email`, `password`, `user_level`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Dosen', 'Informatika', 'dosen', 'dosen@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'dosen', 'oOaljKwVsHjxQ2XKOqq5LYCWWnRIKRrcnWY9nbGTKBDqW2xFnYBGFgxXeFVw', NULL, NULL),
-(2, 'Mahasiswa', 'Informatika', 'mahasiswa', 'mahasiswa@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'mahasiswa', 'oiWMRvNV5giitfs6sU8CcW8c2qpGKJIMJfzljBtCZ8u5jylqJKDxBHVAbgY7', NULL, NULL),
-(3, 'Admin', 'Admin', 'admin', 'admin@siakad.id', '$2a$06$FkUYj4/Kbcm5w0xkopI2WOxpHf.oRNOfpPC2K6ZzYV4/5mykceO8i', 'admin', 'JngbP4Mps1UjGbextWayqKAfV1RL3WhxzBxtNlf94eCmf7qP8Cl5E4CfGWxz', NULL, NULL);
+(1, 'Dosen', 'Informatika', 'dosen', 'dosen@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'dosen', 'SdBdnTgUM3ZXkeJfyAeqmbrLZo2hR3i7j6JLNLOBmOCMRGlj2lnnLcpvQ1Li', NULL, NULL),
+(2, 'Mahasiswa', 'Informatika', 'mahasiswa', 'mahasiswa@siakad.id', '$2a$06$dq1PF9Ni3QWMvQME.IXOz.yKZF4Fcb6H50gvM98uc7xSEIMbwa7jW', 'mahasiswa', 'J9W78thpTQ3AVjyPT3fflJ4CmACnZSgZZijee7g57eVQ6yAp3QTd5Mxae8NX', NULL, NULL),
+(3, 'Admin', 'Admin', 'admin', 'admin@siakad.id', '$2a$06$FkUYj4/Kbcm5w0xkopI2WOxpHf.oRNOfpPC2K6ZzYV4/5mykceO8i', 'admin', 'gJ3cmbDQO1r4TKtyEClZJs1VVJSX66IIW2YDyhIMO60MMXuXfXQIGP415AFn', NULL, NULL),
+(4, 'Paycheck', 'Paycheck', 'paycheck', 'paycheck@impal.id', '$2y$10$Pl1XfiQH.WP6NbYSgc.kUeyHXNPxFbNxIwL/fyPqvchjQufPVU2qS', 'paycheck', 'JGO0PDAaHHCdOCu4mDlpd6UWQliIqkSdiItCrn1CoTGPma5fjqlpXuQ5odqz', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -439,12 +482,12 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `bukti_pembayaran`
 --
 ALTER TABLE `bukti_pembayaran`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
@@ -454,7 +497,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `paycheck`
 --
@@ -464,17 +507,17 @@ ALTER TABLE `paycheck`
 -- AUTO_INCREMENT for table `registrasi`
 --
 ALTER TABLE `registrasi`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `reg_matkul`
 --
 ALTER TABLE `reg_matkul`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --

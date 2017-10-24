@@ -22,7 +22,9 @@ Route::get('/logout',function(){
     return redirect('/');
 })->name('logout');
 
-//bypass login
+//bypass logout
+
+Route::get('/registrasi/matkul', 'RegistrasiController@getDataRegistrasiSmtIni')->name('mahasiswa.registrasi.matkul.index'); 
 
 Route::get('/mahasiswa', 'MahasiswaController@index')->middleware('mahasiswa')->name('mhs');
 Route::get('/dosen', 'DosenController@index')->middleware('dosen')->name('dsn');
@@ -69,23 +71,37 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
 Route::group(['prefix' => 'dosen', 'middleware' => 'dosen'], function () {
     Route::get('/home', 'DosenController@index')->name('dosen.home');
+    Route::get('/kelas/perwalian/{nim}', 'RegistrasiController@getJadwalSementaraMhs');
+    Route::post('/kelas/perwalian/', 'RegistrasiController@accReg')->name('dosen.perwalian.submit');
+    Route::get('/nilai', 'JadwalController@getDataJadwalDosenSmtIni')->name('dosen.nilai.index');
+    Route::get('/nilai/{id}', 'NilaiController@getDataNilaiMhsKelas');
+    Route::post('/nilai', 'NilaiController@setDataNilaiMhsKelas')->name('dosen.nilai.submit');
     Route::resource('jadwal', 'JadwalController', ['names' => [
         'index' => 'dosen.jadwal.index',
     ]]);
     Route::resource('kelas', 'KelasController', ['names' => [
         'index' => 'dosen.kelas.index'
     ]]);
+    // Route::resource('nilai', 'NilaiController', ['names' => [
+    //     'index' => 'dosen.nilai.index'
+    // ]]);
 });
 
 Route::group(['prefix' => 'mahasiswa', 'middleware' => 'mahasiswa'], function () {
-    Route::get('/home', 'MahasiswaController@index')->name('mahasiswa.home');
+    Route::get('/home', 'MahasiswaController@index')->name('mahasiswa.home');    
+    Route::get('/registrasi/matkul/status', 'RegistrasiController@getStatusAcc');
+    Route::post('/registrasi/matkul/submit', 'RegistrasiController@submitReg')->name('mahasiswa.registrasi.matkul.submit');
+    Route::get('/registrasi/matkul', 'RegistrasiController@getDataRegistrasiSmtIni')->name('mahasiswa.registrasi.matkul.index'); 
+    Route::post('/registrasi/tagihan', 'RegistrasiController@uploadBuktiPembayaran');
+    Route::get('/jadwal/sementara', 'JadwalController@getJadwalSementara');
+    Route::get('/nilai', 'NilaiController@getDataNilaiMhs')->name('mahasiswa.nilai.index');
+    Route::post('/registrasi/matkul/submit', 'RegistrasiController@submitReg')->name('mahasiswa.registrasi.matkul.submit');    
     Route::resource('registrasi', 'RegistrasiController', ['names' => [
         'index' => 'mahasiswa.registrasi.index'
     ]]);
-    Route::get('/registrasi/tagihan/{id}/get', 'RegistrasiController@get_tagihan');
-    Route::get('/registrasi/matkul', 'RegistrasiController@getDataRegistrasiSmtIni')->name('mahasiswa.registrasi.matkul.index'); 
-    Route::post('/registrasi/tagihan', 'RegistrasiController@uploadBuktiPembayaran');
-       
+    Route::resource('jadwal', 'JadwalController', ['names' => [
+        'index' => 'mahasiswa.jadwal.index',
+    ]]);  
 });
 
 Route::group(['prefix' => 'paycheck', 'middleware' => 'paycheck'], function () {
